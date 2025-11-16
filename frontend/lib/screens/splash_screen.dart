@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 
 
@@ -9,37 +11,113 @@ class SplashScreen extends StatefulWidget {
   _SplashScreenState createState() => _SplashScreenState();
   }
   
-  class _SplashScreenState extends State<SplashScreen> {
-  @override
-  Widget build(BuildContext context) {
+  class _SplashScreenState extends State<SplashScreen> 
+  with SingleTickerProviderStateMixin {
+
+    String fullText = "Galgotias..";
+    String displayedText = "";
+    int index = 0;
+
+    late AnimationController controller;
+    late Animation<double> positionAnimation;
+    late Animation<double> opacityAnimation;
+      
+    @override
+    void initState(){
+      super.initState();
+
+      controller = AnimationController(
+        vsync: this,
+        duration: Duration(seconds: 2),
+        );
+
+        positionAnimation = Tween<double>(
+          begin: 1,
+          end: 0.4)
+          .animate(
+            CurvedAnimation(parent: controller, curve: Curves.easeOut),
+        );
+
+        opacityAnimation = Tween<double>(
+          begin: 0,
+          end: 1,
+        ).animate(
+          CurvedAnimation(parent: controller, curve: Curves.easeIn),
+        );
+        controller.forward();
+
+        controller.addStatusListener((status) {
+         if (status == AnimationStatus.completed) {
+           startTyping(); // typing animation starts after logo stops
+         }
+       });
+
+    }
+
+    void startTyping() {
+      for (int i = 0; i < fullText.length; i++) {
+        Future.delayed(Duration(milliseconds: 100 * i), () {
+          setState(() {
+           displayedText = fullText.substring(0, i + 1);
+         });
+
+          if (i == fullText.length - 1) {
+            Future.delayed(Duration(seconds: 1), () {
+              Navigator.pushReplacementNamed(context, "/home");
+           });
+         }
+       });
+     }
+   }
+
+
+
+    @override
+    void dispose(){
+      controller.dispose();
+      super.dispose();
+    }
+    
+    @override
+    Widget build(BuildContext context) {
     double screenWidth=MediaQuery.of(context).size.width;
     double screenHeight=MediaQuery.of(context).size.height;
-   return Scaffold(
+    return Scaffold(
     backgroundColor: Colors.white,
-    body: Center(
-      child: Container(
-        width: screenWidth*0.4,
-        height: screenHeight*0.2,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(60),
-          border: Border.all(color: Colors.black,width: 2),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black,
-              blurRadius: 10,
-              spreadRadius: 3,
-            )
-          ]
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(60),
-          child: Image.asset(
-             "assets/images/logo.png",
-              fit: BoxFit.cover,
+    body: AnimatedBuilder(
+      animation: controller,
+      builder: (context , child){
+        return Stack(
+          children: [
+              Positioned(
+              top: screenHeight * positionAnimation.value,
+              left: screenWidth * 0.35,
+              child: SizedBox(
+                width: screenWidth *0.3,
+                  child: ClipOval(
+                  child: Image.asset("assets/images/logo.png",fit: BoxFit.cover,),
+                ),
+              ),
             ),
-        ),
-      )
-    ),
+          
+            Positioned(
+             top: (screenHeight * positionAnimation.value) + (screenWidth * 0.3) + 20,
+             left: screenWidth * 0.35,
+             child: Opacity(
+               opacity: opacityAnimation.value,
+                child: Text(
+                  displayedText, // typing wala text
+                   style: TextStyle(
+                   fontSize: screenHeight * 0.03,
+                   fontWeight: FontWeight.bold,
+                 ),
+               ),
+             ),
+            ),
+
+          ],
+        );
+      }),
    );
   }
-  }
+}
