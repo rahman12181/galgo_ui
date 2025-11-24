@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-
+import 'package:frontend/utils/systembar_utils.dart';
+import 'package:frontend/utils/checkuser_utils.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
-  _SplashScreenState createState() => _SplashScreenState();
+  State<SplashScreen> createState() => _SplashScreenState();
   }
   
   class _SplashScreenState extends State<SplashScreen> 
   with SingleTickerProviderStateMixin {
 
-    String fullText = "Galgotias..";
+    String fullText = "Lets,eat";
     String displayedText = "";
     int index = 0;
 
@@ -24,9 +24,13 @@ class SplashScreen extends StatefulWidget {
     void initState(){
       super.initState();
 
+      WidgetsBinding.instance.addPostFrameCallback((_){
+        SystembarUtil.setSystemBar(context);
+      });
+
       controller = AnimationController(
         vsync: this,
-        duration: Duration(seconds: 2),
+        duration: Duration(seconds: 3),
         );
 
         positionAnimation = Tween<double>(
@@ -46,28 +50,34 @@ class SplashScreen extends StatefulWidget {
 
         controller.addStatusListener((status) {
          if (status == AnimationStatus.completed) {
-           startTyping(); // typing animation starts after logo stops
+           startTyping();
+           WidgetsBinding.instance.addPostFrameCallback((_){
+            if(!mounted) return;
+            CheckuserUtils.checkUser(context);
+           });    // typing animation starts after logo stops
          }
        });
+
 
     }
-
-    void startTyping() {
-      for (int i = 0; i < fullText.length; i++) {
-        Future.delayed(Duration(milliseconds: 100 * i), () {
+     Future<void> startTyping() async {
+       for (int i = 0; i < fullText.length; i++) {
+         await Future.delayed(const Duration(milliseconds: 80));
+         
+          if (!mounted) return;
           setState(() {
-           displayedText = fullText.substring(0, i + 1);
-         });
+             displayedText = fullText.substring(0, i + 1);
+            });
+       }
+      /*  await Future.delayed(const Duration(seconds: 1));
 
-          if (i == fullText.length - 1) {
-            Future.delayed(Duration(seconds: 1), () {
-              Navigator.pushReplacementNamed(context, "/home");
-           });
-         }
-       });
+         if (!mounted) return;
+
+         Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => OnboardingScreen()),
+        );*/
      }
-   }
-
 
 
     @override
@@ -81,15 +91,10 @@ class SplashScreen extends StatefulWidget {
     double screenWidth=MediaQuery.of(context).size.width;
     double screenHeight=MediaQuery.of(context).size.height;
 
+
     return Scaffold(
-    extendBody: true,
     backgroundColor: Colors.white,
     body: SafeArea(
-      top: true,
-      bottom: false,
-      child:SizedBox(
-      width: double.infinity,
-      height: double.infinity,
       child: AnimatedBuilder(
       animation: controller,
       builder: (context , child){
@@ -115,7 +120,7 @@ class SplashScreen extends StatefulWidget {
                   displayedText, // typing wala text
                    style: TextStyle(
                    fontFamily: "Poppins",
-                   fontSize: screenHeight * 0.03,
+                   fontSize: screenHeight * 0.02,
                    fontWeight: FontWeight.bold,
                    color: Colors.black,
                  ),
@@ -125,7 +130,6 @@ class SplashScreen extends StatefulWidget {
           ],
         );
       }),
-    ),
     ),
    );
   }

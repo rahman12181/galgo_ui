@@ -1,21 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:frontend/screens/onboarding_screen.dart';
 import 'package:frontend/screens/splash_screen.dart';
 
 void main() {
-  WidgetsFlutterBinding.ensureInitialized();
-SystemChrome.setEnabledSystemUIMode(
-  SystemUiMode.edgeToEdge
-  );
-SystemChrome.setSystemUIOverlayStyle(
-  const SystemUiOverlayStyle(
-    statusBarColor: Colors.transparent,
-    statusBarIconBrightness: Brightness.dark,
-    systemNavigationBarColor: Colors.transparent,
-    systemNavigationBarIconBrightness: Brightness.dark,
-  ),
-);
-
+ WidgetsFlutterBinding.ensureInitialized();
+ SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
 
   runApp(const GlgoApp());
 }
@@ -31,14 +21,37 @@ class GlgoApp extends StatelessWidget {
     debugShowCheckedModeBanner: false,
     title: "GalGo",
     theme: ThemeData(
-      scaffoldBackgroundColor: Colors.white,
-      primarySwatch: Colors.indigo,
-      buttonTheme: ButtonThemeData(
-      buttonColor: Colors.blue,
-      textTheme: ButtonTextTheme.primary,
+      brightness: Brightness.light,
+      appBarTheme: AppBarTheme(
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+          systemNavigationBarColor: Colors.transparent,
+          statusBarIconBrightness: Brightness.dark,                      //light-> dark icon
+          systemNavigationBarIconBrightness: Brightness.dark,   
+        ),
       )
     ),
-    home:SplashScreen() ,
+
+    darkTheme: ThemeData(
+      brightness: Brightness.dark,
+
+      appBarTheme: AppBarTheme(
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+          systemNavigationBarColor: Colors.transparent,
+          statusBarIconBrightness: Brightness.light,
+          systemNavigationBarIconBrightness: Brightness.light,
+        ),
+      )
+    ),
+
+    routes: {
+      '/home' : (context) => OnboardingScreen(),
+    },
+
+    themeMode: ThemeMode.system,
+    home: SplashScreen(),
+
    );
   }
 }
