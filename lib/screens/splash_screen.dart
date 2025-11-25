@@ -113,11 +113,14 @@ class SplashScreen extends StatefulWidget {
           
             Positioned(
              top: (screenHeight * positionAnimation.value) + (screenWidth * 0.3) + 20,
-             left: screenWidth * 0.35,
+             left: 0,
+             right: 0,
              child: Opacity(
                opacity: opacityAnimation.value,
-                child: Text(
-                  displayedText, // typing wala text
+                child: Center(
+                child:  Text(
+                  displayedText, 
+                  textAlign: TextAlign.center,// typing wala text
                    style: TextStyle(
                    fontFamily: "Poppins",
                    fontSize: screenHeight * 0.02,
@@ -125,6 +128,7 @@ class SplashScreen extends StatefulWidget {
                    color: Colors.black,
                  ),
                ),
+              )
              ),
             ),
           ],

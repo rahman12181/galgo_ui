@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/screens/home_screen.dart';
 import 'package:frontend/screens/login_screen.dart';
-import 'package:frontend/screens/onboarding_screen.dart';
+import 'package:frontend/screens/onboarding_mainscreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CheckuserUtils {
@@ -18,7 +18,7 @@ class CheckuserUtils {
     if (isFirstTime) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const OnboardingScreen()) 
+        MaterialPageRoute(builder: (context) => const OnboardingMainScreen()) 
       );
       preference.setBool("isFirstTime", false);
     }else{
@@ -26,12 +26,12 @@ class CheckuserUtils {
        if (isLoggedIn) {
          Navigator.pushReplacement(
          context,
-         MaterialPageRoute(builder: (context) => const OnboardingScreen())
+         MaterialPageRoute(builder: (context) => const HomeScreen())
        );
      }else{
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const OnboardingScreen())
+        MaterialPageRoute(builder: (context) => const LoginScreen())
       );
      }
     }

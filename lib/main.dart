@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:frontend/screens/onboarding_screen.dart';
+import 'package:frontend/screens/onboarding_mainscreen.dart';
 import 'package:frontend/screens/splash_screen.dart';
 
 void main() {
@@ -46,7 +46,7 @@ class GlgoApp extends StatelessWidget {
     ),
 
     routes: {
-      '/home' : (context) => OnboardingScreen(),
+      '/home' : (context) => OnboardingMainScreen(),
     },
 
     themeMode: ThemeMode.system,
