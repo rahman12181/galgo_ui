@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/screens/home_screen.dart';
 import 'package:frontend/screens/login_screen.dart';
 import 'package:frontend/screens/onboarding_mainscreen.dart';
+import 'package:frontend/screens/signup_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CheckuserUtils {
@@ -31,7 +32,7 @@ class CheckuserUtils {
      }else{
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const LoginScreen())
+        MaterialPageRoute(builder: (context) => const SignupScreen())
       );
      }
     }

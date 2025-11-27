@@ -209,8 +209,8 @@ class _OnboardingMainScreenState extends State<OnboardingMainScreen> {
                                 ),
                                 child: Text(
                                   index == onboardingData.length - 1
-                                      ? "Sign Up"
-                                      : "Log In",
+                                      ? "Skip"
+                                      : "Next",
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontFamily: "poppins",
