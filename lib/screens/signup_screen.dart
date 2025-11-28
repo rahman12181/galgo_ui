@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/screens/home_screen.dart';
 import 'package:frontend/animations.dart/slide_animation.dart';
+import 'package:frontend/services/auth_service.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -10,18 +11,17 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
-
-    final TextEditingController _usernameController = TextEditingController();
-    final TextEditingController _emaolController = TextEditingController();
-    final TextEditingController _passwordController = TextEditingController();
-    final  _formkey = GlobalKey<FormState>();
-    bool _isloading = false;
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final _formkey = GlobalKey<FormState>();
+  bool _isloading = false;
 
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-   
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(
@@ -67,7 +67,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       ),
                       SizedBox(height: 20),
                       TextFormField(
-                        controller: _emaolController,
+                        controller: _emailController,
                         decoration: const InputDecoration(
                           labelText: "Email address",
                           border: UnderlineInputBorder(),
@@ -103,21 +103,38 @@ class _SignupScreenState extends State<SignupScreen> {
                         onPressed: _isloading
                             ? null
                             : () async {
+                                final auth = AuthService();
+
                                 setState(() {
                                   _isloading = true;
                                 });
-                                //api call will be their
-                                await Future.delayed(Duration(seconds: 2));
+                                final response = await auth.signupUser(
+                                  username: _usernameController.text.trim(),
+                                  email: _emailController.text.trim(),
+                                  password: _passwordController.text.trim(),
+                                );
+                                await Future.delayed(Duration(seconds: 3));
                                 setState(() {
                                   _isloading = false;
                                 });
-                                Navigator.pushAndRemoveUntil(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => HomeScreen(),
-                                  ),
-                                  (Route<dynamic> route) => false,
-                                );
+                                if (response["status"] == "success") {
+                                  
+                                  Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => HomeScreen(),
+                                    ),
+                                    (route) => false,
+                                  );
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        response["message"] ?? "Signup failed",
+                                      ),
+                                    ),
+                                  );
+                                }
                               },
                         child: _isloading
                             ? SizedBox(
