@@ -22,4 +22,21 @@ class AuthService {
     );
     return jsonDecode(response.body);
   }
+
+  Future<Map<String, dynamic>> loginUser({
+    required email,
+    required password,
+  })async{
+    final url=Uri.parse("$baseUrl/api/auth/login");
+
+    final loginResponse=await http.post(
+      url,
+      headers: {"Content-Type" : "application/json"},
+      body: jsonEncode({
+        "email" :email,
+        "password" :password,
+      })
+    );
+    return jsonDecode(loginResponse.body);
+  }
 }

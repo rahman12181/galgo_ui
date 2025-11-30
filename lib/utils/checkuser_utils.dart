@@ -32,7 +32,7 @@ class CheckuserUtils {
      }else{
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const SignupScreen())
+        MaterialPageRoute(builder: (context) => const LoginScreen())
       );
      }
     }
