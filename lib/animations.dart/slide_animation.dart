@@ -7,7 +7,7 @@ class SlideAnimation extends StatefulWidget {
   const SlideAnimation({
     super.key,
      required this.child,
-     this.duration=const Duration(microseconds: 600),
+     this.duration=const Duration(milliseconds: 1500),
     });
 
   @override

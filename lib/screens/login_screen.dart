@@ -1,6 +1,9 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/animations.dart/slide_animation.dart';
+import 'package:frontend/screens/forgetpassword_screen.dart';
 import 'package:frontend/screens/home_screen.dart';
+import 'package:frontend/screens/signup_screen.dart';
 import 'package:frontend/services/auth_service.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -15,8 +18,8 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool _isloading = false;
-  bool _isPasswordVisible=false;
-  bool _isColorChanged= false;
+  bool _isPasswordVisible = false;
+  bool _isColorChanged = false;
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +95,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               ? "invalid email address"
                               : null,
                         ),
-                        SizedBox(height: 35,),
+                        SizedBox(height: 35),
                         TextFormField(
                           controller: _passwordController,
                           obscureText: !_isPasswordVisible,
@@ -147,20 +150,29 @@ class _LoginScreenState extends State<LoginScreen> {
                         GestureDetector(
                           onTap: () {
                             setState(() {
-                              _isColorChanged=true;
+                              _isColorChanged = true;
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => ForgetpasswordScreen()));
                             });
                           },
-                          child: Text("Forgot password?",
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: "poppins",
-                            color: _isColorChanged ? const Color.fromARGB(255, 52, 169, 232) : Colors.black,
-                            decoration: TextDecoration.underline,
+                          child: Align(
+                            alignment: Alignment.centerRight,
+                          child:  Text(
+                            "Forgot password?",
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: "poppins",
+                              color: _isColorChanged
+                                  ? const Color.fromARGB(255, 52, 169, 232)
+                                  : Colors.black,
+                              decoration: TextDecoration.underline,
+                            ),
                           ),
-                          ),
+                          )
                         ),
-                        SizedBox(height: 17,),
+                        SizedBox(height: 17),
                         ElevatedButton(
                           onPressed: _isloading
                               ? null
@@ -180,12 +192,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                       email: _emailController.text.trim(),
                                       password: _passwordController.text.trim(),
                                     );
-
+                                    if(!mounted) return;
                                     if (response["status"] == true) {
                                       setState(() {
                                         _isloading = false;
                                       });
-
+                                      if(!mounted) return;
                                       Navigator.pushAndRemoveUntil(
                                         context,
                                         MaterialPageRoute(
@@ -194,19 +206,32 @@ class _LoginScreenState extends State<LoginScreen> {
                                         (route) => false,
                                       );
                                     } else {
+                                      if(!mounted) return;
                                       setState(() {
                                         _isloading = false;
                                       });
-
-                                      ScaffoldMessenger.of(context,).showSnackBar(
-                                        SnackBar(content: Text(response["message"] ??"Login failed",style: TextStyle(fontSize: 12,fontFamily: "poppins",fontWeight: FontWeight.bold),),
-                                        behavior: SnackBarBehavior.floating,
-                                        margin: EdgeInsets.all(17),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadiusGeometry.circular(15),
-                                        ),
-                                        duration: Duration(seconds: 2),
-                                        backgroundColor: const Color.fromARGB(255, 52, 169, 232),
+                                      if(!mounted) return;
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                         SnackBar(content: Text(response["message"] ??"Login failed",
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              fontFamily: "poppins",
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          behavior: SnackBarBehavior.floating,
+                                          margin: EdgeInsets.all(17),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadiusGeometry.circular(
+                                                  15,
+                                                ),
+                                          ),
+                                          duration: Duration(seconds: 2),
+                                          backgroundColor: const Color.fromARGB(255,52,169,232,
+                                          ),
                                         ),
                                       );
                                     }
@@ -214,15 +239,23 @@ class _LoginScreenState extends State<LoginScreen> {
                                     setState(() {
                                       _isloading = false;
                                     });
-
+                                    if(!mounted) return;
                                     ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(content: Text("Error: $e",style: TextStyle(fontSize: 12,fontFamily: "poppins",fontWeight: FontWeight.bold),),
-                                      behavior: SnackBarBehavior.floating,
-                                      margin: EdgeInsets.all(17),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadiusGeometry.circular(15),
-                                      ),
-                                      backgroundColor:  const Color.fromARGB(255, 52, 169, 232),
+                                      SnackBar( content: Text( "Error: $e",
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            fontFamily: "poppins",
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        behavior: SnackBarBehavior.floating,
+                                        margin: EdgeInsets.all(17),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadiusGeometry.circular(15),
+                                        ),
+                                        backgroundColor: const Color.fromARGB(255,52,169,  232,
+                                        ),
                                       ),
                                     );
                                   }
@@ -230,7 +263,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Color.fromARGB(255, 52, 169, 232),
-                            minimumSize: Size(screenWidth*0.9, screenHeight*0.10),
+                            minimumSize: Size(
+                              screenWidth * 0.9,
+                              screenHeight * 0.10,
+                            ),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(15),
                             ),
@@ -244,9 +280,45 @@ class _LoginScreenState extends State<LoginScreen> {
                                     fontSize: 16,
                                     fontFamily: "poppins",
                                     color: Colors.black,
-                                    
                                   ),
                                 ),
+                        ),
+                        SizedBox(height: screenHeight * 0.07),
+                        Align(
+                          alignment: Alignment.center,
+                          child: RichText(
+                            text: TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: "Don't have an account?",
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    fontFamily: "poppins",
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: "Sign Up",
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    fontFamily: "poppins",
+                                    fontWeight: FontWeight.bold,
+                                    color: const Color.fromARGB(255,52,169,232,
+                                    ),
+                                  ),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => SignupScreen(),
+                                        ),
+                                      );
+                                    },
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                       ],
                     ),

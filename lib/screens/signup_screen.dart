@@ -209,6 +209,8 @@ class _SignupScreenState extends State<SignupScreen> {
                                       password: _passwordController.text.trim(),
                                     );
 
+                                    if(!mounted) return;
+
                                     if (response["status"] == "success") {
                                       setState(() {
                                         _isloading = false;
@@ -239,6 +241,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                       );
                                     }
                                   } catch (e) {
+                                    if(!mounted) return;
                                     setState(() {
                                       _isloading = false;
                                     });
@@ -366,17 +369,18 @@ class _SignupScreenState extends State<SignupScreen> {
                                 TextSpan(
                                   text: "Joined us before?",
                                   style: TextStyle(
-                                    fontSize: 15,
+                                    fontSize: 12,
                                     fontFamily: "poppins",
-                                    color: const Color.fromARGB(255,119,118,118,),
+                                    color: Colors.black,
                                   ),
                                 ),
                                 TextSpan(
                                   text: "Log In",
                                   style: TextStyle(
-                                    color: Colors.blue,
+                                    color: const Color.fromARGB(255, 52, 169, 232),
                                     fontFamily: "poppins",
-                                    fontSize: 15,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold
                                   ),
                                   recognizer: TapGestureRecognizer()
                                     ..onTap = () {

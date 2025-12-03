@@ -39,4 +39,19 @@ class AuthService {
     );
     return jsonDecode(loginResponse.body);
   }
+
+  Future<Map<String,dynamic>> forgotPassword( {
+    required email,
+  })async{
+    final url=Uri.parse("$baseUrl/api/auth/forgotPassword");
+
+    final forgotPasswordResponse=await http.post(
+      url,
+      headers: {"Content-Type" : "application/json"},
+      body: jsonEncode({
+        "email" :email,
+      })
+    );
+    return jsonDecode(forgotPasswordResponse.body);
+  }
 }
