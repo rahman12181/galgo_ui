@@ -43,7 +43,7 @@ class AuthService {
   Future<Map<String,dynamic>> forgotPassword( {
     required email,
   })async{
-    final url=Uri.parse("$baseUrl/api/auth/forgotPassword");
+    final url=Uri.parse("$baseUrl/api/auth/forgotpassword");
 
     final forgotPasswordResponse=await http.post(
       url,
@@ -53,5 +53,22 @@ class AuthService {
       })
     );
     return jsonDecode(forgotPasswordResponse.body);
+  }
+
+  Future<Map<String,dynamic>> verifyOtp({
+    required  email,
+    required  otp,
+  })async{
+    final url=Uri.parse("$baseUrl/api/auth/verifyotp");
+    
+    final verifyOtpResponse=await http.post(
+      url,
+      headers: {"Content-Typr": "application/json"},
+      body: jsonEncode({
+        "email":email,
+        "otp": otp,
+      })
+    );
+    return jsonDecode(verifyOtpResponse.body);
   }
 }

@@ -48,7 +48,6 @@ class GlgoApp extends StatelessWidget {
     routes: {
       '/home' : (context) => OnboardingMainScreen(),
     },
-
     themeMode: ThemeMode.system,
     home: SplashScreen(),
 

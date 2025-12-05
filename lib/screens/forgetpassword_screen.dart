@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/animations.dart/slide_animation.dart';
 import 'package:frontend/screens/login_screen.dart';
+import 'package:frontend/screens/otp_screen.dart';
 import 'package:frontend/services/auth_service.dart';
 import 'package:http/http.dart';
 
@@ -106,7 +107,7 @@ class _ForgetPasswordScreenState extends State<ForgetpasswordScreen> {
                               validator: (value) =>
                                   (value == null || value.isEmpty)
                                   ? "email required"
-                                  : value.endsWith("@gmail.com")
+                                  : !value.endsWith("@gmail.com")
                                   ? "invalid email address"
                                   : null,
                             ),
@@ -132,9 +133,10 @@ class _ForgetPasswordScreenState extends State<ForgetpasswordScreen> {
                                       _isloading=true;
                                     });
                                     if(!mounted) return;
+                                    final email=_emailController.text.trim();
                                     Navigator.pushAndRemoveUntil(
                                     context,
-                                    MaterialPageRoute(builder: (context) => LoginScreen()),
+                                    MaterialPageRoute(builder: (context) => OtpScreen(email: email)),
                                     (route) =>false);
 
                                   }else{
